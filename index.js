@@ -63,24 +63,27 @@ function viewDepartments() {
     let query = "SELECT * FROM department";
     connection.query(query,function(err, res) {
         if (err) throw err;
+        console.log("\nAll Departments: \n")
         console.table(res);
         startApp();
     });
 };
 
 function viewRoles() {
-    let query = "SELECT * FROM role";
+    let query = "SELECT role.id, title, salary, name FROM role LEFT JOIN department ON department.id = role.department_id";
     connection.query(query,function(err, res) {
         if (err) throw err;
+        console.log("\nAll Roles: \n")
         console.table(res);
         startApp();
     });
 };
 
 function viewEmployees() {
-    let query = "SELECT * FROM employees";
+    let query = "SELECT employees.id, employees.first_name, employees.last_name, role.title, department.name, employees.manager AS department, role.salary FROM employees LEFT JOIN role ON employees.role_id = role.id LEFT JOIN department on role.department_id = department.id";
     connection.query(query,function(err, res) {
         if (err) throw err;
+        console.log("\nAll Employees: \n")
         console.table(res);
         startApp();
     });
@@ -112,9 +115,8 @@ function createEmployee() {
     .then(function(answer){
         connection.query("INSERT INTO employees (first_name, last_name, role_id, manager) VALUES (?,?,?,?)", 
         [answer.empFirstName, answer.empLastName, answer.roleId, answer.managerName], 
-        function(err, res) {
+        function(err, answer) {
             if (err) throw err;
-            console.table(res);
             startApp();
         });
     });
@@ -141,9 +143,8 @@ function createRole() {
     .then(function(answer){
         connection.query("INSERT INTO role (title, salary, department_id) VALUES (?,?,?)", 
         [answer.roleName, answer.salary, answer.deptId], 
-        function(err, res) {
+        function(err, answer) {
             if (err) throw err;
-            console.table(res);
             startApp();
         });
     });
@@ -156,9 +157,9 @@ function createDepartment() {
         name: "deptName"
     })
     .then(function(answer) {
-        connection.query("INSERT INTO department (name) VALUES (?)", [answer.deptName], function(err, res) {
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.deptName], 
+        function(err, answer) {
             if (err) throw err;
-            console.table(res);
             startApp();
         });
     });
@@ -182,7 +183,6 @@ function updateRole() {
         [answer.newRoleId, answer.empUpdate],
         function(err, res) {
             if (err) throw err;
-            console.table(res);
             startApp();
         });
     });
