@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const startApp = require('../index');
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -11,6 +12,7 @@ connection.connect(function(err){
     if(err) {
         throw err;
     }
+    startApp();
 });
 
 module.exports = connection;
