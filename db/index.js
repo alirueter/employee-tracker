@@ -1,4 +1,5 @@
 const connection = require('./connection');
+const inquirer = require('inquirer');
 
 class DB {
     createEmployee(employee) {
@@ -8,7 +9,15 @@ class DB {
         return this.connection.promise().query("INSERT INTO role SET ?", role);
     };
     createDepartment(department) {
-        return this.connection.promise().query("INSERT INTO department SET ?", department);
+        inquirer.prompt({
+            type: "input",
+            message: "What is the department name?",
+            name: "deptName"
+        })
+        .then(function(answer) {
+            return this.connection.promise().query("INSERT INTO department SET ?", department);
+        })
+        
     };
     viewDepartments() {
         return this.connection.promise().query("SELECT * FROM department");

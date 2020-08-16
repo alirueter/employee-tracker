@@ -21,7 +21,7 @@ function startApp() {
         name: "option"
     })
     .then(function(result) {
-        console.log(result.option);
+        console.log("You chose: ", result.option);
 
         switch (result.option) {
             case "View all departments":
@@ -60,5 +60,6 @@ function startApp() {
 
 //ask info you need
 //handoff in same order you need in seed
+
 
 module.exports = startApp();
